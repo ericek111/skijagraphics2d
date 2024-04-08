@@ -2169,6 +2169,12 @@ public final class SkijaGraphics2D extends Graphics2D {
         if (LOG_ENABLED) {
             LOGGER.debug("dispose()");
         }
+        // when Surface is closed, Canvas is no longer valid, but it may stay open for a while longer until it's collected
+        if (this.canvas._owner instanceof Managed canvasOwner) {
+            if (canvasOwner.isClosed()) {
+                return;
+            }
+        }
         this.canvas.restoreToCount(this.restoreCount);
     }
 
